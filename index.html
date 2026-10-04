@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GroundCheck Pro — grounding verification for RAG answers</title>
+<title>GroundCheck Pro (in development)</title>
 <style>
   :root { --ink:#15181d; --mut:#5b6470; --line:#e6e8ec; --acc:#1f6feb; --bg:#fff; --soft:#f7f8fa; }
   * { box-sizing:border-box; }
@@ -35,70 +35,50 @@
 <div class="wrap">
 
   <header>
-    <h1>Know when your AI answer isn't in the source.</h1>
-    <p class="sub">GroundCheck Pro verifies that a RAG or Q&amp;A answer is actually supported by the
-    document it cites — one call, sub-second on CPU, your data never leaves your infrastructure.</p>
-    <a class="cta" href="#access">Request API access</a>
-    <a class="cta ghost" href="https://github.com/Pranshurs/groundcheck" target="_blank" rel="noopener">See the open model</a>
+    <h1>GroundCheck Pro: in development</h1>
+    <p class="sub">A commercial version of <a href="https://github.com/Pranshurs/groundcheck">GroundCheck</a>,
+    the open grounding checker for RAG answers, is being built. It isn't available yet: there's no
+    hosted API, no access keys and no pricing.</p>
+    <a class="cta" href="https://github.com/Pranshurs/groundcheck" target="_blank" rel="noopener">Use the open model</a>
+    <a class="cta ghost" href="#contact">Get in touch</a>
   </header>
 
   <section>
     <h2>The problem</h2>
-    <p>RAG systems confidently state things their sources never say — a swapped number, a flipped
-    figure, a fact pulled from nowhere. Catching this with a frontier LLM-as-judge is slow, costs
-    money per call, and ships your users' data to a third party. GroundCheck Pro is a small,
-    specialized model that does just this one job.</p>
+    <p>RAG systems sometimes state things their sources never say: a swapped number, a flipped
+    figure, a fact pulled from nowhere. GroundCheck checks whether an answer is supported by the
+    source it was given, with a small classifier instead of an LLM judge.</p>
   </section>
 
   <section>
-    <h2>How it works</h2>
-<pre><code>curl -s https://api.groundcheck.dev/v1/check \
-  -H "X-API-Key: $GROUNDCHECK_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "source": "In Q3, revenue increased 12% year-over-year to $2.1 billion.",
-    "answer": "The company&#39;s revenue fell 12% in Q3."
-  }'
-
-# → { "label": "hallucinated", "p_grounded": 0.01, "latency_ms": 38 }</code></pre>
-    <p class="note">Add <code>"granular": true</code> to get a verdict per sentence, or POST to
-    <code>/v1/check/batch</code> to score up to 100 answers at once for offline log audits.</p>
+    <h2>Available today: the open model</h2>
+    <p>GroundCheck v2 is a ModernBERT-base classifier. It's open, and its evaluation can be
+    reproduced: pinned weights, public data builders, committed evaluation reports and a regression
+    gate. All published numbers, their protocol and their limitations are documented in the
+    <a href="https://github.com/Pranshurs/groundcheck">repository</a>. The code is Apache-2.0 and the
+    weights are MIT; the training data keeps its upstream terms, some of which are
+    non-commercial.</p>
   </section>
 
   <section>
-    <h2>Why teams use it</h2>
+    <h2>What Pro is meant to add</h2>
     <div class="grid">
-      <div class="card"><h3>Real-time gating</h3><p>Block or flag an unsupported answer before the user sees it.</p></div>
-      <div class="card"><h3>Offline eval</h3><p>Audit thousands of logged answers; catch a regression when you change a prompt or model.</p></div>
-      <div class="card"><h3>Private by default</h3><p>Self-host the container or use no-retention hosting. Source text stays with you.</p></div>
-      <div class="card"><h3>Cheap at scale</h3><p>150M-parameter model, sub-second on a CPU. Pennies per thousand checks.</p></div>
+      <div class="card"><h3>Sentence-level verdicts</h3><p>Which part of an answer is unsupported, not just whether.</p></div>
+      <div class="card"><h3>Batch auditing</h3><p>Score logged answers in bulk to catch regressions.</p></div>
+      <div class="card"><h3>Commercial-use data</h3><p>Training data cleared for commercial use.</p></div>
     </div>
+    <p class="note">These are plans. No Pro benchmark results are published yet.</p>
   </section>
 
-  <section>
-    <h2>Measured performance</h2>
-    <table>
-      <tr><th>Benchmark</th><th>Metric</th><th>GroundCheck</th></tr>
-      <tr><td>Q&amp;A grounding (held-out)</td><td>accuracy</td><td>0.96</td></tr>
-      <tr><td>Short claim–evidence (VitaminC)</td><td>accuracy</td><td>0.87</td></tr>
-      <tr><td>Single-fact edits caught</td><td>recall</td><td>0.92</td></tr>
-      <tr><td>GPT-4-turbo judge (same task)</td><td>F1, reference</td><td>0.634</td></tr>
-    </table>
-    <p class="note">Numbers from our own evaluation harness; the underlying open model and benchmark
-    code are public. The free research model is on Hugging Face and PyPI — Pro adds the hosted API,
-    sentence-level output, batch auditing, and commercially-clean training data.</p>
-  </section>
-
-  <section id="access">
-    <h2>Request access</h2>
-    <p>Pilot keys are limited while we onboard early teams. Tell us your use case and we'll send a key
-    and pricing. Email <a href="mailto:pranshu.rs08@gmail.com">pranshu.rs08@gmail.com</a> with your
-    stack (LangChain, LlamaIndex, custom) and rough monthly volume.</p>
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>If this would be useful to your team, email
+    <a href="mailto:pranshu.rs08@gmail.com">pranshu.rs08@gmail.com</a>.</p>
   </section>
 
   <footer>
-    GroundCheck Pro · hosted grounding verification · the open research model is MIT-licensed on
-    <a href="https://github.com/Pranshurs/groundcheck">GitHub</a>.
+    GroundCheck Pro is in development. The open model is on
+    <a href="https://github.com/Pranshurs/groundcheck">GitHub</a> (code Apache-2.0, weights MIT).
   </footer>
 
 </div>
